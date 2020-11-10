@@ -1,0 +1,34 @@
+{
+    "presets": [
+        ["env", {"targets": { "node": "10.0.0" }}]
+    ],
+
+    "plugins": [
+        "transform-decorators-legacy",
+        "transform-object-rest-spread"
+    ],
+
+    "env": {
+        "test": {
+            "plugins": [
+                "babel-plugin-rewire",
+                "rewire"
+            ]
+        },
+        "development": {
+            "plugins": [
+                [
+                    "add-header-comment",
+                    {
+                        "header": [
+                            "NOTE: This code is transpiled from ES2017 using Babel.",
+                            "Instead of modifying this file directly, work with the source code instead and upload the transpiled output here."
+                        ],
+                        "commentLineStart": " * ",
+                        "commentEnd": "\n "
+                    }
+                ]
+            ]
+        }
+    }
+}
