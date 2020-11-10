@@ -1,6 +1,6 @@
 {
     "name": "botella-project2",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "lib/main.js",
     "repository": {
         "type": "git",
@@ -62,7 +62,7 @@
     },
     "release": {
         "branches": [
-            "+([0-9])?(.{+([0-9]),x}).x",
+            "botella-project2-+([0-9])?(.{+([0-9]),x}).x",
             "master"
         ],
         "pkgRoot": "dist",
