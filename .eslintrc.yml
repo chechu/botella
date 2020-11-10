@@ -1,0 +1,37 @@
+# this is the eslint configuration for javascript modules only
+# there's a typescript-slintrc.js file for typescript modules
+
+root: true
+parser: babel-eslint
+parserOptions:
+  ecmaFeatures:
+    legacyDecorators: true
+env:
+  node: true
+  jest: true
+
+plugins:
+  - jest
+
+extends:
+  - airbnb
+  - plugin:jest/recommended
+
+rules:
+  default-case: off
+  no-template-curly-in-string: off
+  no-plusplus: off
+  no-underscore-dangle: off
+  no-await-in-loop: off
+  class-methods-use-this: off
+  no-param-reassign: off
+  no-empty-function: off
+  import/no-extraneous-dependencies: off
+  indent: ['error', 4]
+  max-statements: ['error', 25]
+  max-len: ['error', {code: 160} ]
+  no-use-before-define: ['error', 'nofunc']
+  no-restricted-syntax:
+    - error
+    - selector: CallExpression[callee.object.name='logger'][callee.property.name='error'][arguments.length < 2]
+      message: logger.error must always be invoked with at least two parameters, a message and an Error object.
