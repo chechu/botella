@@ -1,6 +1,6 @@
 {
     "name": "botella-project1",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "main": "lib/main.js",
     "repository": {
         "type": "git",
@@ -12,11 +12,12 @@
         }
     },
     "dependencies": {
-        "lodash.pick": "^4.4.0"
+        "@semantic-release/exec": "^5.0.0",
+        "@semantic-release/git": "^9.0.0",
+        "lodash.pick": "^4.4.0",
+        "semantic-release": "^17.2.2"
     },
     "devDependencies": {
-        "@semantic-release/exec": "3.1.2",
-        "@semantic-release/git": "7.0.3",
         "babel-cli": "^6.26.0",
         "babel-core": "^6.26.3",
         "babel-eslint": "^9.0.0",
@@ -34,8 +35,7 @@
         "eslint-plugin-react": "^7.8.2",
         "handlebars": "~4.5.3",
         "jest": "^23.6.0",
-        "semantic-release": "15.9.14",
-        "semantic-release-monorepo": "6.1.1",
+        "semantic-release-monorepo": "7.0.3",
         "serverless": "1.65.0"
     },
     "scripts": {
@@ -62,9 +62,10 @@
     },
     "release": {
         "branches": [
-            "+([0-9])?(.{+([0-9]),x}).x",
+            "botella-project1-+([0-9])?(.{+([0-9]),x}).x",
             "develop",
-            "master"
+            "master",
+            "botella-project1-1.x"
         ],
         "pkgRoot": "dist",
         "verifyConditions": [
