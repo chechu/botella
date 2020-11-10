@@ -1,10 +1,10 @@
 {
-    "name": "@botella/project1",
+    "name": "botella-project1",
     "version": "1.0.0",
     "main": "lib/main.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/chechu/botella"
+        "url": "https://github.com/chechu/botella.git"
     },
     "config": {
         "commitizen": {
