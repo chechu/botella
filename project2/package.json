@@ -1,6 +1,6 @@
 {
     "name": "botella-project2",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "main": "lib/main.js",
     "repository": {
         "type": "git",
