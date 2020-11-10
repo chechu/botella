@@ -1,0 +1,94 @@
+{
+    "name": "botella-project2",
+    "version": "0.0.1",
+    "main": "lib/main.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/chechu/botella.git"
+    },
+    "config": {
+        "commitizen": {
+            "path": "cz-customizable"
+        }
+    },
+    "dependencies": {
+        "lodash.pick": "^4.4.0"
+    },
+    "devDependencies": {
+        "@semantic-release/exec": "3.1.2",
+        "@semantic-release/git": "7.0.3",
+        "babel-cli": "^6.26.0",
+        "babel-core": "^6.26.3",
+        "babel-eslint": "^9.0.0",
+        "babel-jest": "^23.6.0",
+        "babel-plugin-add-header-comment": "^1.0.3",
+        "babel-plugin-rewire": "^1.1.0",
+        "babel-plugin-transform-decorators-legacy": "^1.3.5",
+        "babel-plugin-transform-object-rest-spread": "^6.26.0",
+        "babel-preset-env": "^1.6.1",
+        "eslint": "^5.5.0",
+        "eslint-config-airbnb": "^17.1.0",
+        "eslint-plugin-import": "^2.12.0",
+        "eslint-plugin-jest": "^21.17.0",
+        "eslint-plugin-jsx-a11y": "^6.0.3",
+        "eslint-plugin-react": "^7.8.2",
+        "handlebars": "~4.5.3",
+        "jest": "^23.6.0",
+        "semantic-release": "15.9.14",
+        "semantic-release-monorepo": "6.1.1",
+        "serverless": "1.65.0"
+    },
+    "scripts": {
+        "clean": "rm -rf node_modules node_modules_all dist artifact.zip",
+        "build": "npm run build:init && npm run lint && npm run build:js && npm run build:install",
+        "build:init": "npm install; rm -rf dist && mkdir dist",
+        "build:js": "npx babel lib -d ./dist",
+        "build:install": "mv node_modules node_modules_all; npm install --production --package-lock; cp -LR ./node_modules ./dist; rm -rf node_modules; mv node_modules_all node_modules",
+        "package": "npm run build && npm run package:pack",
+        "package:pack": "rm -f artifact.zip && cd dist/ && [ `ls -1 | wc -l` -eq 0 ] || zip -r --quiet ../artifact.zip *",
+        "sls": "npm run package; npx sls",
+        "sls:light": "npm run build:init; npx sls",
+        "lint": "npx eslint lib",
+        "test:unit": "npm run check:aws && TEST_TYPE=unit npx jest --coverage --testPathPattern=tests/.*unit\\.test",
+        "test:integration": "npm run check:aws && AWS_SDK_LOAD_CONFIG=true TEST_TYPE=integration npx jest --coverage --testPathPattern=tests/.*integration\\.test",
+        "test:acceptance": "npm run check:aws && TEST_TYPE=acceptance npx jest --testPathPattern=tests/.*acceptance\\.test",
+        "test": "npm run test:unit && npm run test:integration && npm run test:acceptance",
+        "check:aws": "node -e \"require.resolve('aws-sdk')\" 2>&1 > /dev/null; if [ $? -ne 0 ]; then echo 'CHECK FAILED! The module aws-sdk is not available. Please install it globally ($> npm i -g aws-sdk), and set $NODE_PATH properly (probably $> export $NODE_PATH=/usr/local/lib/node_modules'; exit 1; fi",
+        "semantic-release": "npx semantic-release -e semantic-release-monorepo",
+        "link": "npm run link:store && npm link $npm_config_package",
+        "link:store": "echo $npm_config_package >> .linkedPackages && awk -i inplace '!a[$0]++' .linkedPackages",
+        "link:fromStore": "[ -e .linkedPackages ] && cat .linkedPackages | xargs npm link",
+        "deploy": "npm run package && npx vp-deploy"
+    },
+    "release": {
+        "branches": [
+            "+([0-9])?(.{+([0-9]),x}).x",
+            "master"
+        ],
+        "pkgRoot": "dist",
+        "verifyConditions": [
+            {
+                "path": "@semantic-release/exec",
+                "cmd": "npm run build:init && cp package.json ./dist"
+            },
+            "@semantic-release/git"
+        ],
+        "prepare": [
+            {
+                "path": "@semantic-release/exec",
+                "cmd": "npm run build:js"
+            },
+            "@semantic-release/npm",
+            {
+                "path": "@semantic-release/exec",
+                "cmd": "cp ./dist/package.json ."
+            },
+            "@semantic-release/git"
+        ],
+        "publish": [
+            "@semantic-release/npm",
+            "@semantic-release/github"
+        ],
+        "success": []
+    }
+}

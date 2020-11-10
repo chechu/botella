@@ -1,0 +1,29 @@
+service: botella-project1 
+
+package:
+  artifact: ./artifact.zip
+
+provider:
+  name: aws
+  profile: jesus.lanchas
+  runtime: nodejs10.x
+  stage: ${opt:stage}
+  region: eu-west-1
+  stackTags:
+    PACKAGE_VERSION: ${file(./package.json):version}
+    PACKAGE_NAME: ${file(./package.json):name}
+
+  deploymentBucket:
+    name: ${self:provider.profile}-${self:provider.region}
+    serverSideEncryption: AES256
+
+  environment:
+    STAGE: ${self:provider.stage}
+
+functions:
+  main:
+    handler: main.main
+    events:
+      - http:
+          path: /
+          method: get
